@@ -7,8 +7,12 @@ import { useNavigate } from "react-router";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { PiEye } from "react-icons/pi";
 import { useState } from "react";
+import { FaGithub } from "react-icons/fa6";
+import { FaGoogle } from "react-icons/fa";
+import { useLoginWithGoogle } from "../../components/social-auth/GoogleAuthComponent";
+import { useLoginWithGithub } from "../../components/social-auth/GithubAuthComponent";
 
-export default function App() {
+export default function Login() {
   const [login, { isLoading, isSuccess }] = useLoginMutation();
   const [isShowPassword, setIsShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -17,20 +21,23 @@ export default function App() {
 
   const shcema = z.object({
     email: z.string().nonempty("email is required").email(),
-    password: z.string().nonempty("password is required")
+    password: z.string().nonempty("password is required"),
   });
+
+  const { loginWithGoogle, googleLogout } = useLoginWithGoogle();
+  const { loginWithGithub, GithubLogout } = useLoginWithGithub();
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors },
   } = useForm({
     defaultValues: {
       email: "",
-      password: ""
+      password: "",
     },
-    resolver: zodResolver(shcema)
+    resolver: zodResolver(shcema),
   });
 
   const onSubmit = async (data) => {
@@ -50,7 +57,7 @@ export default function App() {
 
   return (
     <section className="bg-teal-600 w-[100%] h-screen">
-      <div className="h-screen flex justify-center items-center mx-auto">
+      <div className="h-screen flex justify-center flex-col items-center mx-auto">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="min-w-sm md:min-w-xl bg-gray-50 p-5 rounded-2xl "
@@ -68,7 +75,7 @@ export default function App() {
               />
               {errors.email && (
                 <span className="text-red-600 mt-2">
-                  This field is required
+                  {errors.email.message}
                 </span>
               )}
             </div>
@@ -88,7 +95,7 @@ export default function App() {
               />
               {errors.password && (
                 <span className="text-red-600 mt-2">
-                  This field is required
+                  {errors.password.message}
                 </span>
               )}
             </div>
@@ -100,6 +107,38 @@ export default function App() {
             </button>
           </div>
         </form>
+        <div className="bg-teal-100 w-100 rounded-2xl mt-2 p-4">
+          <p className="text-center text-gray-500">Test Login </p>
+          <div className="flex gap-5 justify-center mt-5">
+            <button
+              onClick={loginWithGoogle}
+              className="text-teal-500 text-3xl cursor-pointer"
+            >
+              <FaGoogle />
+            </button>
+            <button
+              onClick={loginWithGithub}
+              className="text-teal-500 text-3xl cursor-pointer"
+            >
+              <FaGithub />
+            </button>
+          </div>
+          <p className="text-center text-gray-500">Test Logout</p>
+          <div className="flex gap-5 justify-center mt-5">
+            <button
+              onClick={GithubLogout}
+              className="text-teal-500 text-3xl cursor-pointer"
+            >
+              <FaGoogle />
+            </button>
+            <button
+              onClick={googleLogout}
+              className="text-teal-500 text-3xl cursor-pointer"
+            >
+              <FaGithub />
+            </button>
+          </div>
+        </div>
       </div>
       <ToastContainer />
     </section>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { NavLink } from "react-router";
+import { NavLink, Link } from "react-router-dom";
 
 export default function NavbarBasic() {
   const count = useSelector((store) => store.counterR);
@@ -26,6 +26,12 @@ export default function NavbarBasic() {
             >
               Counter
             </NavLink>
+            <Link
+              to="/products/create"
+              className="text-teal-600 hover:underline"
+            >
+              Create Product
+            </Link>
             {/*      <!-- Mobile trigger --> */}
             <button
               className={`relative order-10 block h-10 w-10 self-center lg:hidden
@@ -102,6 +108,17 @@ export default function NavbarBasic() {
                   to="/login"
                 >
                   <span>Login</span>
+                </NavLink>
+              </li>
+              <li role="none" className="flex items-center ml-4">
+                <NavLink
+                  role="menuitem"
+                  aria-current="page"
+                  aria-haspopup="false"
+                  className="flex h-[40px] items-center gap-2 text-white rounded-md py-4 bg-emerald-500 transition-colors duration-300 hover:bg-emerald-600 focus:text-emerald-600 focus:outline-none focus-visible:outline-none lg:px-8"
+                  to="/register"
+                >
+                  <span>Register</span>
                 </NavLink>
               </li>
             </ul>
